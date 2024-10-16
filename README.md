@@ -11,21 +11,21 @@ USE GoogleProject;
 GO
 
 CREATE TABLE DailyActivity (
-    Id                      BIGINT,	
-    ActivityDate            VARCHAR(50), -- Let's strictly follow the original datatype from the dataset
-    TotalSteps              INT,
-    TotalDistance           NUMERIC(10, 3),
-    TrackerDistance         NUMERIC(10, 3),
+    Id                       BIGINT,	
+    ActivityDate             VARCHAR(50), -- Let's strictly follow the original datatype from the dataset
+    TotalSteps               INT,
+    TotalDistance            NUMERIC(10, 3),
+    TrackerDistance          NUMERIC(10, 3),
     LoggedActivitiesDistance NUMERIC(10, 3),
-    VeryActiveDistance      NUMERIC(10, 3),
+    VeryActiveDistance       NUMERIC(10, 3),
     ModeratelyActiveDistance NUMERIC(10, 3),
-    LightActiveDistance     NUMERIC(10, 3),
-    SedentaryActiveDistance NUMERIC(10, 3),
-    VeryActiveMinutes       INT,
-    FairlyActiveMinutes     INT,
-    LightlyActiveMinutes    INT,
-    SedentaryMinutes        INT,
-    Calories                INT
+    LightActiveDistance      NUMERIC(10, 3),
+    SedentaryActiveDistance  NUMERIC(10, 3),
+    VeryActiveMinutes        INT,
+    FairlyActiveMinutes      INT,
+    LightlyActiveMinutes     INT,
+    SedentaryMinutes         INT,
+    Calories                 INT
 );
 
 BULK INSERT DailyActivity
@@ -104,8 +104,32 @@ FULL OUTER JOIN
 
 ```
 
+1. **Project Aim**: 
+  - Perform data transformation, including loading datasets, data cleaning, and merging with using SQL Server Management Studio (SSMS)
 
-This project aims to load datasets using Data Definition Language (DDL) queries, such as CREATE, ALTER, UPDATE and DELETE, to effectively import the data into SSMS. It also focuses on data cleaning and merging. For example, the SleepDay dataset successfully deletes duplicate rows using Common Table Expressions (CTE) and the ROW_NUMBER window function. In terms of data merging, the WeekActivitySleep table is successfully created by merging two tables (WeekActivity and WeekSleep) using a FULL OUTER JOIN. Additionally, to correctly order the days of the week (from Monday to Sunday), the PERSISTED keyword was used in a computed column (a virtual column in a database table whose values are calculated from an expression using other columns in the same table.)
+2. **Data Loading**
+	- Load datasets using **Data Definition Language (DDL)** queries like `CREATE`, `ALTER`, `UPDATE`, and `DELETE` to import data into SSMS.
+
+3. **Data Cleaning**: 
+  - The SleepDay dataset is Successfully removes duplicate rows using:
+      - **Common Table Expressions (CTE)**.
+        - Make SleepDataDuplicates CTE in order to delete duplication from CTE effectively
+      - The **ROW_NUMBER** window function.
+        - Use Row_number to figure out the duplicate values (e.g., if the Row_number is more than 1, that means the data is duplicated) 
+      - The `COALESCE(wa.Days, ws.Days)` function:
+    	- Returns the first non-`NULL` day value from either the **WeekActivity** or **WeekSleep** table during the full outer join.
+    	- Ensures the resulting **Days** column in the **INSERT** statement contains a valid day, even if data is missing from one of the tables.
+
+4. **Data Merging**: 
+  - The WeekActivitySleep table:
+    - Created by merging WeekActivity and WeekSleep tables using a **FULL OUTER JOIN**.
+  
+5. **Ordering Days of the Week**:
+  - The **PERSISTED** keyword:
+    - Used in a computed column to ensure correct ordering of days (Monday to Sunday).
+    - A **computed column** is a virtual column whose values are calculated from expressions using other columns in the table.
+
+
 
 &nbsp;
 
@@ -136,7 +160,31 @@ This project aims to load datasets using Data Definition Language (DDL) queries,
 
 
 
-This project aims to analyze and visualize data from SSMS effectively. In the data analysis phase, StepCategory, SleepCategory, and BMICategory were created using nested IF statements to categorize and visualize each dataset. To track individual participants' sleep and BMI trends, the VLOOKUP function was applied appropriately. The Power Pivot feature was utilized to enable interactive graphs, especially for viewing trends by days of the week. The project developed a data model and KPIs to monitor user activity patterns, including daily steps and sleep hours, providing clearer insights into health trends through the structured analysis of weekly activity and sleep correlations.
+1. **Project Aim**: 
+  - Leverage **Excel** to analyze, visualize, and model data retrieved from **SQL Server Management Studio (SSMS)**. This project will focus on:
+    - Performing in-depth **data analysis** to identify trends and insights.
+    - Creating **data visualizations** to effectively communicate findings.
+    - Defining and tracking key performance indicators (**KPIs**) relevant to the business context.
+    - Building comprehensive **data models** to support decision-making.
+    - Developing interactive **dashboards** to present the results in an easily digestible format for stakeholders.
+
+2. **Data Categorization**: 
+  - **StepCategory**, **SleepCategory**, and **BMICategory**:
+    - Created using **nested IF statements** to categorize and visualize each dataset.
+
+3. **Tracking Individual Trends**:
+  - **VLOOKUP function**:
+    - Applied to track individual participants' sleep and **BMI** trends.
+
+4. **Interactive Visualization**:
+  - **Power Pivot feature**:
+    - Utilized to create interactive graphs, allowing easy trend visualization by days of the week.
+
+5. **Data Model and KPIs**: 
+  - Developed a data model with **Key Performance Indicators (KPIs)** to monitor:
+    - **User activity patterns**, including daily steps and sleep hours.
+  - Provided clearer insights into health trends through structured analysis of:
+    - **Weekly activity and sleep correlations**.
 
 &nbsp;
 
@@ -147,10 +195,29 @@ This project aims to analyze and visualize data from SSMS effectively. In the da
 
 
 
+- **Project Aim**: 
+  - Create a Bellabeat data analysis report to explore trends in smart device usage, focusing on user activity, sleep, and weight.
+  - The report utilizes insights from Excel graphs to inform marketing strategies and provides recommendations based on data trends. 	  - The project offers solutions to business questions by analyzing the data and generating actionable insights.
 
-This project explores trends in smart device usage related to user activity, sleep, and weight to inform marketing strategies. Using SQL and Excel, data from activity logs, sleep patterns, and BMI were analyzed through functions like Pivot Tables and VLOOKUP. The analysis shows most users engage in moderate activity, taking 4,000 to 11,999 steps daily, but many fall short of recommended step counts on weekdays. Sleep data reveals a common weekday sleep deficit, with users averaging less than the recommended 7.5 hours, although recovery occurs on weekends. Additionally, a significant portion of users falls into the overweight BMI category, indicating potential for targeted interventions.
+- **Data Analysis**:
+  - Tools used:
+    - **SQL** and **Excel**.
+    - Functions like **Pivot Tables** and **VLOOKUP**.
+  - **User Activity**:
+    - Most users engage in **moderate activity**, taking 4,000 to 11,999 steps daily.
+    - Many users fall short of the recommended step count on weekdays.
+  - **Sleep Data**:
+    - Shows a common **weekday sleep deficit**, with users averaging less than the recommended 7.5 hours.
+    - Recovery sleep occurs on weekends.
+  - **BMI Data**:
+    - A significant portion of users falls into the **overweight BMI category**, indicating potential for targeted interventions.
 
-Recommendations include promoting sleep tracking features to help users improve weekday sleep habits, encouraging hydration as a tool for weight management through the Spring water bottle, and marketing a holistic wellness approach combining activity and sleep optimization. These insights help Bellabeat better tailor its marketing campaigns to improve user health and engagement.
+- **Recommendations**:
+  - Promote **sleep tracking features** to help users improve weekday sleep habits.
+  - Encourage **hydration** as a tool for weight management using the **Spring water bottle**.
+  - Market a **holistic wellness approach** combining activity and sleep optimization.
+
+
 
 
 
